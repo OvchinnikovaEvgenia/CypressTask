@@ -2,8 +2,8 @@
   "name": "Using fixtures to represent data",
   "email": "hello@cypress.io",
   "body": "Fixtures are a great way to mock data for responses to routes",
-  "username": "EvgeniaOvchinnikova",
-  "password": "F6d7Fd2yjj6TL-7",
+  "username": " ",
+  "password": " ",
   "baseUrl": "https://discuss.flarum.org/",
   "expectedElements": ["Profile", "Settings", "Night Mode", "Log Out"],
   "testBio": "Default text",
@@ -11,7 +11,7 @@
   {
     "data": {
       "type":"users",
-      "id":"40382",
+      "id":" ",
       "attributes":{
         "bio":"Stubbed text"
       }
