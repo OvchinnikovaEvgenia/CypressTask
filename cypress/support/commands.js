@@ -1,47 +1,28 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import * as CONST from '../utils/constants'
 
 Cypress.Commands.add('checkPosition', (rect) => { 
-    let centerX = Cypress.config().viewportWidth/2;
-    let centerY = Cypress.config().viewportHeight/2;
-    let currentX = rect['x'];
-    let currentY = rect['y'];
+    const halfTheValue = 2;
+    let centerX = Cypress.config().viewportWidth/halfTheValue;
+    let centerY = Cypress.config().viewportHeight/halfTheValue;
+    let currentX = rect[CONST.COORDINATES.X];
+    let currentY = rect[CONST.COORDINATES.Y];
     if ((currentX < centerX) && (currentY < centerY)) {
-        return 'LeftUp';
+        return CONST.POSITIONS.LEFT_UP;
     };
     if ((currentX > centerX) && (currentY < centerY)) {
-        return 'RightUp';
+        return CONST.POSITIONS.RIGHT_UP;
     };
     if ((currentX > centerX) && (currentY > centerY)) {
-        return 'RightDown';
+        return CONST.POSITIONS.RIGHT_DOWN;
     };
     if ((currentX < centerX) && (currentY > centerY)) {
-        return 'LeftDown';
+        return CONST.POSITIONS.LEFT_DOWN;
     };
- })
+ });
+
+ Cypress.Commands.add('info', (message) => { 
+    cy.task('log', message);
+ });
 
 
 

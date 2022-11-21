@@ -1,6 +1,6 @@
-import profilePage from '../pages/profilePage';
+import * as CONST from '../utils/constants'
 
-class authorizedHomePage{
+class AuthorizedHomePage{
     elements = {
         userProfileButton : () => cy.get('.username').first(),
         profileDropdown : () => cy.get('ul.Dropdown-menu--right .Button-label'),
@@ -8,20 +8,20 @@ class authorizedHomePage{
     }
 
     isUserNameOnTheRight() {
-        cy.task('log','Check username position');
+        cy.info('Check username position');
         this.elements.userProfileButton().then((el) => {
             cy.checkPosition(el[0].getBoundingClientRect())
-            .should('eq', 'RightUp');
+            .should('eq', CONST.POSITIONS.RIGHT_UP);
         })
     }
 
     clickOnUserProfileButton() {
-        cy.task('log','Click user profile button');
+        cy.info('Click user profile button');
         this.elements.userProfileButton().click();
     }
 
     isDropdownElementsAsExpected(expectedElements) {
-        cy.task('log','Check dropdown elements');
+        cy.info('Check dropdown elements');
        this.elements.profileDropdown().then((elements) => {
             let itemsText = Array.from(elements, el => el.innerText).sort();
             let expectedItems = Array.from(expectedElements).sort();
@@ -30,9 +30,9 @@ class authorizedHomePage{
     }
 
     clickOnProfileButton() {
-        cy.task('log','Click profile button');
+        cy.info('Click profile button');
         this.elements.profileButton().click();
-        return new profilePage();
     }
 }
-export default authorizedHomePage
+
+module.exports = new AuthorizedHomePage();

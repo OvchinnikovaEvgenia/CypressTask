@@ -1,35 +1,29 @@
 import testdata from '../fixtures/example.json';
-import homePage from '../pages/homePage';
-import authorizedHomePage from '../pages/authorizedHomePage';
+import homePage from '../pages/HomePage';
+import authHomePage from '../pages/AuthorizedHomePage';
+import userProfilePage from '../pages/ProfilePage'
 
-describe('update bio', () => {
-  var authHomePage;
-  var userProfilePage;
+describe('Update bio', () => {
   beforeEach(function() {
     cy.intercept('POST', '**/login').as('Login');
-    cy.intercept('POST', '**/6').as('Load');   
-    cy.intercept('POST', `**/api/users/${testdata.expectedResponse.data.id}`, testdata.expectedResponse,).as('NewBio');     
-  })
-
-  before(() => {
-    cy.task('log','Move to Flarum website');
-    cy.visit(testdata.baseUrl); 
+    cy.intercept('POST', '**/6').as('Load');      
   })
 
   it('Check logo', () => {  
+    cy.info('Move to Flarum website');
+    cy.visit(testdata.baseUrl); 
     homePage.isLogoDisplayed();
   })
 
   it('Login user', function() {
+    //can login into Flarum only after new visiting to the website
     cy.visit(testdata.baseUrl); 
     homePage.clickLoginButton();
-    var loginForm = homePage.switchToLoginForm();
-    loginForm.enterUsername(testdata.username);
-    loginForm.enterPassword(testdata.password);
-    loginForm.clickSubmitButton();
+    homePage.loginForm.enterUsername(testdata.username);
+    homePage.loginForm.enterPassword(testdata.password);
+    homePage.loginForm.clickSubmitButton();
     cy.wait('@Login');
     cy.wait('@Load');
-    authHomePage = new authorizedHomePage();
     authHomePage.isUserNameOnTheRight();
   }) 
   
@@ -39,19 +33,24 @@ describe('update bio', () => {
   })
 
   it('Check profile', () => {
-    userProfilePage = authHomePage.clickOnProfileButton();
+    authHomePage.clickOnProfileButton();
     cy.wait('@Load');
     userProfilePage.isUserNameInUpPart();
-    userProfilePage.isUserOnline();
+    userProfilePage.checkUserStatus(testdata.expectedStatus);
   })
 
   it('Check changed bio', function() {
-    var startText = userProfilePage.getCurrentBioText();
+    cy.intercept('POST', `**/api/users/${testdata.userId}`, (req) => {
+      req.continue((res) => {
+          res.body.data.attributes.bio = testdata.bio;
+      });
+    }).as('NewBio');  
+    let startText = userProfilePage.getCurrentBioText();
     userProfilePage.insertBio(`${testdata.testBio}{enter}`);
-    cy.task('log','Mock bio response');
+    cy.info('Mock bio response');
     cy.wait('@NewBio');
-    userProfilePage.bioShouldHaveText(testdata.expectedResponse.data.attributes.bio);
-    cy.task('log','Reload page');
+    userProfilePage.bioShouldHaveText(testdata.bio);
+    cy.info('Reload page');
     cy.reload();
     cy.wait('@Load');
     userProfilePage.bioShouldHaveText(startText);

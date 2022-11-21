@@ -1,4 +1,7 @@
-class profilePage {
+import TestUtils from '../utils/TestUtils'
+import * as CONST from '../utils/constants'
+
+class ProfilePage {
 
     elements = {
         userName : () => cy.get('.UserCard-profile .username'),
@@ -8,37 +11,35 @@ class profilePage {
     }
 
     isUserNameInUpPart() {
-        cy.task('log','Check username position');
+        cy.info('Check username position');
         this.elements.userName().then((el) => {
             cy.checkPosition(el[0].getBoundingClientRect()).should((text) => {
-              expect(text).to.be.oneOf(['LeftUp', 'RightUp']);
+              expect(text).to.be.oneOf([CONST.POSITIONS.LEFT_UP, CONST.POSITIONS.RIGHT_UP]);
             });
         });
     }
 
-    isUserOnline() {
-        cy.task('log','Check user status');
-        this.elements.userStatus().then((element) => 
-            expect(element.text().trim()).to.equal('Online'));
+    checkUserStatus(status) {
+        cy.info('Check user status');
+        this.elements.userStatus().invoke('text').should('contain', status);
     }
 
     getCurrentBioText() {
-        cy.task('log','Get current bio');
+        cy.info('Get current bio');
         this.elements.userBio().click().invoke('text').then((currentText) => currentText);
     }
 
     insertBio(text) {
-        cy.task('log','Insert bio');
+        cy.info('Insert bio');
         this.elements.userBioInput().clear().type(text);
     }
 
     bioShouldHaveText(text) {     
-        if (!typeof(text) == 'undefined') {
-            cy.task('log','Check bio text');
-            this.elements.userBio().click().invoke('text').then((currentText) => {
-                expect(currentText).to.equal(text);           
-            }); 
+        if (!TestUtils.isUndefined(text)) {
+            cy.info('Check bio text');
+            this.elements.userBio().click().invoke('text').should('eq', text); 
         }   
     }
 }
-export default profilePage
+
+module.exports = new ProfilePage();

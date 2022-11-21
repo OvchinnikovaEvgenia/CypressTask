@@ -1,4 +1,6 @@
-class loginForm {
+import testdata from '../../fixtures/example.json';
+
+class LoginForm {
 
     elements = {
         usernameInput : () => cy.get('[placeholder = "Username or Email"]'),
@@ -7,19 +9,21 @@ class loginForm {
     }
 
     enterUsername(username) {
-        cy.task('log','Enter username');
-        this.elements.usernameInput().wait(500).type(username);
+        cy.info('Enter username');
+        //used wait here because the caret moves before all the data is entered
+        this.elements.usernameInput().wait(testdata.timeoutTime).type(username);
     }
 
     enterPassword(password) {
-        cy.task('log','Enter password');
-        this.elements.passwordInput().wait(500).type(password);
+        cy.info('Enter password');
+        //used wait here because the caret moves before all the data is entered
+        this.elements.passwordInput().wait(testdata.timeoutTime).type(password);
     }
 
     clickSubmitButton() {
-        cy.task('log','Click submit button');
+        cy.info('Click submit button');
         this.elements.submitButton().click();
     }
 }
 
-export default loginForm
+export default LoginForm

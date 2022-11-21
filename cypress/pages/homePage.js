@@ -1,6 +1,8 @@
-import loginForm from '../pages/forms/loginForm';
+import LoginForm from './forms/LoginForm';
 
-class homePage{
+class HomePage{
+
+    loginForm = new LoginForm();
 
     elements = {
         loginButton : () => cy.get('.item-logIn>button'),
@@ -8,18 +10,14 @@ class homePage{
     }
 
     isLogoDisplayed() {
-        cy.task('log','Check is logo visible');
+        cy.info('Check is logo visible');
         this.elements.pageLogo().should('be.visible');
     }
 
     clickLoginButton() {
-        cy.task('log','Click login button');
+        cy.info('Click login button');
         this.elements.loginButton().click();
-    }
-
-    switchToLoginForm() {
-        return new loginForm();
     }
 }
 
-module.exports = new homePage();
+module.exports = new HomePage();
