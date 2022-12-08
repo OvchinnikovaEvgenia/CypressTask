@@ -1,11 +1,11 @@
 {
-  "username": "",
-  "password": "",
+  "username": "EvgeniaOvchinnikova",
+  "password": "F6d7Fd2yjj6TL-7",
   "baseUrl": "https://discuss.flarum.org/",
   "expectedElements": ["Profile", "Settings", "Night Mode", "Log Out"],
   "testBio": "Default text",
   "timeoutTime": 500,
   "expectedStatus": "Online",
   "bio":"Stubbed text",
-  "userId":""
+  "userId":"40382"
 }

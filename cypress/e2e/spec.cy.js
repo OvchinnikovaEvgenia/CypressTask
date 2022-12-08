@@ -9,15 +9,11 @@ describe('Update bio', () => {
     cy.intercept('POST', '**/6').as('Load');      
   })
 
-  it('Check logo', () => {  
-    cy.info('Move to Flarum website');
+  it('Should update bio', () => {  
+    cy.info('Step 1: Move to Flarum website');
     cy.visit(testdata.baseUrl); 
     homePage.isLogoDisplayed();
-  })
-
-  it('Login user', function() {
-    //can login into Flarum only after new visiting to the website
-    cy.visit(testdata.baseUrl); 
+    cy.info('Step 2: Login uset');
     homePage.clickLoginButton();
     homePage.loginForm.enterUsername(testdata.username);
     homePage.loginForm.enterPassword(testdata.password);
@@ -25,21 +21,15 @@ describe('Update bio', () => {
     cy.wait('@Login');
     cy.wait('@Load');
     authHomePage.isUserNameOnTheRight();
-  }) 
-  
-  it('Check user menu', () => {
+    cy.info('Step 3: Click on user name');
     authHomePage.clickOnUserProfileButton();
     authHomePage.isDropdownElementsAsExpected(testdata.expectedElements);
-  })
-
-  it('Check profile', () => {
+    cy.info('Step 4: Click on profile menu item');
     authHomePage.clickOnProfileButton();
     cy.wait('@Load');
     userProfilePage.isUserNameInUpPart();
     userProfilePage.checkUserStatus(testdata.expectedStatus);
-  })
-
-  it('Check changed bio', function() {
+    cy.info('Step 5: Update user bio');
     cy.intercept('POST', `**/api/users/${testdata.userId}`, (req) => {
       req.continue((res) => {
           res.body.data.attributes.bio = testdata.bio;
@@ -50,7 +40,7 @@ describe('Update bio', () => {
     cy.info('Mock bio response');
     cy.wait('@NewBio');
     userProfilePage.bioShouldHaveText(testdata.bio);
-    cy.info('Reload page');
+    cy.info('Step 6: Reload page');
     cy.reload();
     cy.wait('@Load');
     userProfilePage.bioShouldHaveText(startText);
