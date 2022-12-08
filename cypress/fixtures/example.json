@@ -1,0 +1,11 @@
+{
+  "username": "",
+  "password": "",
+  "baseUrl": "https://discuss.flarum.org/",
+  "expectedElements": ["Profile", "Settings", "Night Mode", "Log Out"],
+  "testBio": "Default text",
+  "timeoutTime": 500,
+  "expectedStatus": "Online",
+  "bio":"Stubbed text",
+  "userId":""
+}
